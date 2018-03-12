@@ -20,7 +20,8 @@ router.post('/', (req,res,next)=>{
 
   page.save()
   .then(()=>{
-    res.redirect('/');
+    // res.redirect('/');
+    res.json(page);
   })
   .catch((err)=>{
     console.log(err);
@@ -33,5 +34,8 @@ router.get('/add', (req,res,next)=>{
   // res.redirect('/');
 });
 
+router.get('/:urlTitle', (req,res,next)=>{
+  // res.send('hit dynamic route at '+ req.params.urlTitle);
+});
 
 module.exports = router;

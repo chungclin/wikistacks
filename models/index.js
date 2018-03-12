@@ -3,6 +3,7 @@ const db = new Sequelize('postgres://localhost:5432/wikistack', {
     logging: false
 });
 
+
 const Page = db.define('page', {
   title: {
       type: Sequelize.STRING,
@@ -11,16 +12,11 @@ const Page = db.define('page', {
   urlTitle: {
       type: Sequelize.STRING,
       allowNull: false,
-      hooks: {
-        beforeValidate: (title, option) =>{
-
-            //virtual getter, not a permanent property that exists
-            // getRoute(){
-                const urlTitle = this.getDataValue('urlTitle');
-                return '/wiki/' + urlTitle;
-            // }
-        }
-      }
+        //virtual getter, not a permanent property that exists
+        // getRoute(){
+        //     const urlTitle = this.getDataValue('urlTitle');
+        //     return '/wiki/' + this.getDataValue(title);
+        // }
   },
   content: {
       type: Sequelize.TEXT,
@@ -34,6 +30,23 @@ const Page = db.define('page', {
       defaultValue: Sequelize.NOW
   }
 });
+
+//outside the instance so URL's are not stored in the database
+Page.hook('beforeValidate', (page, options)=>{
+    page.urlTitle = generateUrlTitle(page.title);
+})
+
+function generateUrlTitle (title) {
+    if (title) {
+      // Removes all non-alphanumeric characters from title
+      // And make whitespace underscore
+        let url = '/wiki/' + title.replace(/\s+/g, '_').replace(/\W/g, '');
+      return url;
+    } else {
+      // Generates random 5 letter string
+      return Math.random().toString(36).substring(2, 7);
+    }
+  }
 
 const User = db.define('user', {
   name: {
