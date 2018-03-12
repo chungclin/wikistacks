@@ -16,20 +16,14 @@ app.use(morgan('dev'));
 //HTTP request get submitted over internet in strings
 //You'll need convert those strings into objects
 //You'll need both these lines a) for react jsx and b) for normal form html sent back
-app.use(bodyParser.json({type: 'application/*+json'} )) // a)
+app.use(bodyParser.json()) // a)
 app.use(bodyParser.urlencoded( {extended : true} )) // b)
 //now, req.body's content is available to this application
 
+app.use(express.static(__dirname + '/node_modules'));
+app.use(express.static(__dirname + '/public'));
+
 app.use('/', routes); //sends all income requests to our routes folder
-
-// app.get('/', (req, res, next)=>{
-//   console.log('root path requested', res.statusCode);
-//   res.send('hi');
-// });
-
-// app.get('/wiki/:urlTitle', (req,res,next)=>{
-//   //need to insert urlTitle value
-// });
 
 models.db.sync({force: true})
 .then(function () {

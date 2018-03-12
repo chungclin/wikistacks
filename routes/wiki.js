@@ -35,7 +35,7 @@ router.get('/add', (req,res,next)=>{
 });
 
 router.get('/:urlTitle', (req,res,next)=>{
-  // res.send('hit dynamic route at '+ req.params.urlTitle);
+  res.send('hit dynamic route at '+ req.params.urlTitle);
 });
 
 module.exports = router;
