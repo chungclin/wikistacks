@@ -26,7 +26,8 @@ router.post("/", (req, res, next) => {
     return Page.create({
       title: req.body.title,
       content: req.body.content,
-      status: req.body.status
+      status: req.body.status,
+      tags: req.body.tags
     }).then(createdPage => {
       return createdPage.setAuthor(user); //this is a method given created as a result of belongsTo
     });
@@ -36,6 +37,17 @@ router.post("/", (req, res, next) => {
 // get /wiki/add
 router.get("/add", (req, res, next) => {
   res.render("addpage");
+});
+
+//
+router.get("/search/:tag", (req, res, next) => {
+  Page.findByTag(req.params.tag)
+    .then(pages => {
+      res.render("index", {
+        pages: pages
+      });
+    })
+    .catch(next);
 });
 
 router.get("/:urlTitle", (req, res, next) => {

@@ -29,8 +29,33 @@ const Page = db.define("page", {
     get() {
       return "/wiki/" + this.getDataValue("urlTitle");
     }
+  },
+  tags: {
+    type: Sequelize.ARRAY(Sequelize.TEXT),
+    set: function(value) {
+      let arrayOfTags;
+      if (typeof value === "string") {
+        arrayOfTags = value.split(",").map(tag => {
+          return tag.trim();
+        });
+        this.setDataValue("tags", arrayOfTags);
+      } else {
+        this.setDataValue("tags", value);
+      }
+    }
   }
 });
+
+//class method
+Page.findByTag = function(tag) {
+  return Page.findAll({
+    where: {
+      tags: {
+        $overlap: [tag]
+      }
+    }
+  });
+};
 
 Page.beforeValidate(function(page) {
   if (page.title) {

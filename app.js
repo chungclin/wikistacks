@@ -6,7 +6,7 @@ const path = require("path");
 const nunjucks = require("nunjucks");
 const { db, Page, User } = require("./models");
 const wikiRouter = require("./routes/wiki");
-// const userRouter = require("./routes/user");
+const userRouter = require("./routes/users");
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -23,7 +23,7 @@ app.engine("html", nunjucks.render);
 app.use(express.static(path.join(__dirname + "/public")));
 
 app.use("/wiki", wikiRouter);
-// app.use("/user", userRouter);
+app.use("/users", userRouter);
 
 app.get("/", (req, res, next) => {
   res.render("index");
