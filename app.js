@@ -34,10 +34,10 @@ app.use((err, req, res, next) => {
   res.status(500).send(err.message);
 });
 
-Page.sync()
+Page.sync({ force: false })
   .then(() => {
     console.log("Page model synced");
-    return User.sync();
+    return User.sync({ force: false });
   })
   .then(() => {
     console.log("User model synced");

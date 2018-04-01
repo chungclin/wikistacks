@@ -23,6 +23,12 @@ const Page = db.define("page", {
   date: {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW
+  },
+  route: {
+    type: Sequelize.VIRTUAL,
+    get() {
+      return "/wiki/" + this.getDataValue("urlTitle");
+    }
   }
 });
 
@@ -39,12 +45,15 @@ const User = db.define("user", {
   },
   email: {
     type: Sequelize.STRING,
+    // unique: true,
     validate: {
-      isEmail: false
+      // isEmail: true
     },
     allowNull: false
   }
 });
+
+Page.belongsTo(User, { as: "author" });
 
 module.exports = {
   db,
